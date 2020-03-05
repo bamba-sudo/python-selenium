@@ -23,37 +23,80 @@ server.sendmail(email_user, email_send, message)
 server.quit()
 
 '''
-
-path = r"C:\Users\Bamba\Downloads\chromedriver_win32\chromedriver.exe"
-
+# Var
+path = r"C:\Users\Bamba\Documents\chromedriver_win32\chromedriver.exe"
 driver = webdriver.Chrome(path)
+choice = 0
+link = "https://www.boursorama.com/cours/analyses/AAPL/"
+element = "c-faceplate__price " 
+#
 
-x = 2
-i = 0
+# def
+def menu():
+	print("\n1. Apple"
+		"\n2. Alibaba"
+		"\n3. Facebook"
+		"\n4. Choose my stock...")
 
-while (i<x):
-	driver.get('https://www.boursorama.com/cours/analyses/AAPL/')
+def extracteur(unDriver, unLink, unElement):
+	unDriver.get(unLink)
 
-	posts = driver.find_elements_by_class_name("c-faceplate__price ")
+	posts = unDriver.find_elements_by_class_name(unElement)
 
 	for post in posts:
-		print(post.text)
+		newPost = post.text[0:6]
+		# print("\n--> Apple : ", newPost," USD")
 
-	i = i + 1
+	return newPost
+def emailSender():
+	
+#
 
-email_user = 'monamiegoerge@gmail.com'
-email_send = 'monamiegoerge@gmail.com'
-server = smtplib.SMTP('smtp.gmail.com', 587)
-server.starttls()
+# Debut du programme
 
-server.login(email_user, 'gangawix99')
+print("\nHi ! I am Goerge\n")
 
-message = post.text
+# Menu
 
-server.sendmail(email_user, email_send, message)
+while(choice != 1 and choice != 2 and choice != 3 and choice != 4):
+	menu()
+	choice = int(input("Choose one of them : "))
 
-server.quit()
+# Choix numero 1
+if(choice == 1):
+	print("\nVous avez choisi :", choice)
 
-print("Success: send it !")
+	# extraire le text du html pour le stocker dans une variable
+	# par la class="c-faceplate__price"
+	# tag <div></div>
+	
+	extracteur(driver, link, element)
 
-driver.quit()
+
+	'''
+	# va envoyer l'extrait du text pris du text par email
+	email_user = 'monamiegoerge@gmail.com'
+
+	email_send = 'monamiegoerge@gmail.com'
+
+	server = smtplib.SMTP('smtp.gmail.com', 587)
+
+	server.starttls()
+
+
+	server.login(email_user, 'gangawix99')
+
+
+	message = post.text
+
+	try:
+		server.sendmail(email_user, email_send, message)
+		print("email sent")
+	except:
+		print("error")
+	server.quit()
+
+	print("Success: send it !")
+
+'''
+	driver.quit()
