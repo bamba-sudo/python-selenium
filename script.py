@@ -10,6 +10,9 @@ import smtplib
 
 from config import *
 
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 '''
 email_user = 'monamiegoerge@gmail.com'
 email_send = 'monamiegoerge@gmail.com'
@@ -28,11 +31,11 @@ server.quit()
 
 # Var
 path = r"C:\Users\Bamba\Documents\chromedriver_win32\chromedriver.exe"
-driver = webdriver.Chrome(path)
-choice = 0
 appleLink = "https://www.boursorama.com/cours/analyses/AAPL/"
 element = "c-faceplate__price " 
 alibabaLink = "https://www.boursorama.com/cours/BABA/"
+choix = 1
+appleHtml = 'email.html'
 #
 
 
@@ -54,17 +57,29 @@ def extracteur(unDriver, unLink, unElement):
 	unDriver.quit()
 	return newPost
 
-def emailSender(unPost, unEmailUser, unEmailSender, unMessage):
+def emailSender(unPost, unEmailUser, unEmailSender, unHtml):
 	server = smtplib.SMTP('smtp.gmail.com', 587)
 
 	server.starttls()
 
 	server.login(unEmailUser, 'gangawix99')
 
-	message = unMessage+unPost
+	the_msg = MIMEMultipart("alternative")
+
+	plain_txt = "Testing the message"
+
+	html = open(unHtml).read() %("Salut")
+
+	part_1 = MIMEText(plain_txt, 'plain')
+	part_2 = MIMEText(html,"html")
+
+	the_msg.attach(part_1)
+	the_msg.attach(part_2)
+
+	print(the_msg.as_string())
 
 	try:
-		server.sendmail(unEmailUser, unEmailSender, message)
+		server.sendmail(unEmailUser, unEmailSender, the_msg.as_string())
 		print("Email sent")
 	except:
 		print("Error")
@@ -77,46 +92,48 @@ def emailSender(unPost, unEmailUser, unEmailSender, unMessage):
 
 print("\nHi ! I am Goerge\n")
 
-# Menu
+while(choix == 1):
+	# Menu
+	driver = webdriver.Chrome(path)
+	choice = 0
+	while(choice != 1 and choice != 2 and choice != 3 and choice != 4):
+		menu()
+		choice = int(input("Choose one of them : "))
+	# Choix numero 1
+	if(choice == 1):
+		print("\nVous avez choisi : Apple")
 
-while(choice != 1 and choice != 2 and choice != 3 and choice != 4):
-	menu()
-	choice = int(input("Choose one of them : "))
+		# extraire le text du html pour le stocker dans une variable
+		# par la class="c-faceplate__price"
+		# tag <div></div>
+		
+		post = extracteur(driver, appleLink, element)
 
-# Choix numero 1
-if(choice == 1):
-	print("\nVous avez choisi : Apple")
+		# va envoyer l'extrait du text pris du text par email
+		emailSender(post, EMAIL_USER, EMAIL_SENDER, appleHtml)
 
-	# extraire le text du html pour le stocker dans une variable
-	# par la class="c-faceplate__price"
-	# tag <div></div>
-	
-	post = extracteur(driver, appleLink, element)
+	# Choix numero 2
+	if(choice == 2):
+		print("\nVous avez choisi : Alibaba")
 
-	# va envoyer l'extrait du text pris du text par email
-	emailSender(post, EMAIL_USER, EMAIL_SENDER, "Apple --> ")
+		post = extracteur(driver, alibabaLink, element)
 
-# Choix numero 2
-if(choice == 2):
-	print("\nVous avez choisi : Alibaba")
+		emailSender(post, EMAIL_USER, EMAIL_SENDER, "Alibaba --> ")
 
-	post = extracteur(driver, alibabaLink, element)
+	if(choice == 3):
+		print("\nVous avez choisi: Facebook")
 
-	emailSender(post, EMAIL_USER, EMAIL_SENDER, "Alibaba --> ")
+		post = extracteur(driver, alibabaLink, element)
 
-if(choice == 3):
-	print("\nVous avez choisi: Facebook")
+		emailSender(post, EMAIL_USER, EMAIL_SENDER, "Facebook --> ")
+	if(choice == 4):
+		print("\nVous avez choisi: A votre choix")
 
-	post = extracteur(driver, alibabaLink, element)
+		indexLink = str(input("\nEntrez votre link ici de boursorama : "))
 
-	emailSender(post, EMAIL_USER, EMAIL_SENDER, "Facebook --> ")
-if(choice == 4):
-	print("\nVous avez choisi: A votre choix")
+		nameOfStock = input("\nEntrez le nom du stock ici : ")+" --> "
 
-	indexLink = str(input("\nEntrez votre link ici de boursorama : "))
+		post = extracteur(driver, indexLink, element)
 
-	nameOfStock = input("\nEntrez le nom du stock ici : ")+" --> "
-
-	post = extracteur(driver, indexLink, element)
-
-	emailSender(post, EMAIL_USER, EMAIL_SENDER, nameOfStock)
+		emailSender(post, EMAIL_USER, EMAIL_SENDER, nameOfStock)
+	choix = int(input("\nVoulez vous conitnuez - \n1.Oui\n2.Non\n ... "))
