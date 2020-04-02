@@ -6,6 +6,8 @@
 <html lang="fr">
 <head>
 	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style type="text/css">
 		/*
 	Bamba-sudo
@@ -15,11 +17,6 @@
 
 	--candara: Candara;
 	--verdana: Verdana;
-}
-
-body{
-
-	background-color: lightgray;
 }
 
 h1 {
@@ -32,7 +29,7 @@ h1 {
 
 .block1 {
 
-	background-color: 	white;
+	background-color: 	lightgray;
 	width: 700px;
 	height: 500px;
 	border-radius: 3px;
@@ -42,21 +39,30 @@ h1 {
 .txt {
 
 	font-family: var(--verdana);
-	padding-left: 30px;
+	margin: 50px;
+}
+
+.txt2 {
+
+	font-family: var(--verdana);
+	margin: 50px;
 }
 	</style>
+
 </head>
 <!-- Exemple -->
 <body>
 	<div class="block1">
-		<h1> Hi I am Goerge ! </h1>
+		<div class="txt">
+			<h1> Hi I am Goerge ! </h1>
+		</div>
 		<div class="txt">
 			<h2 class=""> - Apple - </h2>
 		</div>
 		<div>
-			<p>
-				%s
-			</p>
+			<h3 class="txt2">
+				Price now : %s
+			</h3>
 		</div>
 	</div>
 </body>

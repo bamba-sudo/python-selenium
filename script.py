@@ -35,7 +35,7 @@ appleLink = "https://www.boursorama.com/cours/analyses/AAPL/"
 element = "c-faceplate__price " 
 alibabaLink = "https://www.boursorama.com/cours/BABA/"
 choix = 1
-appleHtml = 'email.html'
+appleHtml = 'emailV2.html'
 #
 
 
@@ -68,7 +68,7 @@ def emailSender(unPost, unEmailUser, unEmailSender, unHtml):
 
 	plain_txt = "Testing the message"
 
-	html = open(unHtml).read() %("Salut")
+	html = open(unHtml).read() %(unPost)
 
 	part_1 = MIMEText(plain_txt, 'plain')
 	part_2 = MIMEText(html,"html")
